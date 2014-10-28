@@ -243,6 +243,7 @@ DEPENDENCIES
   librarian-puppet
   pg
   pry-rails
+  puma
   puppet
   quiet_assets
   rails (= 4.1.6)
