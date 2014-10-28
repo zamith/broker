@@ -26,6 +26,10 @@ group :development do
   gem 'spring'
 end
 
+group :production do
+  gem 'pg'
+end
+
 group :test do
   gem 'rspec-rails'
 end
