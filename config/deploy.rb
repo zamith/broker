@@ -1,4 +1,4 @@
-lock '3.1.0'
+lock '3.2.1'
 
 set :repo_url, 'git@github.com:zamith/broker.git'
 
