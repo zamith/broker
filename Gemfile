@@ -27,3 +27,9 @@ end
 group :doc do
   gem 'sdoc', '~> 0.4.0'
 end
+
+group :deploy do
+  gem 'librarian-puppet'
+  gem 'puppet'
+  gem 'vagrant'
+end
