@@ -1,0 +1,12 @@
+table.dists-table.small-12.columns
+  thead
+    tr
+      th Branch
+      th Time of Creation
+      th
+  tbody
+    - @dists.each do |dist|
+      tr
+        td = dist.branch_name
+        td = dist.created_at
+        td = link_to "Download", dist.url, class: "button tiny"
