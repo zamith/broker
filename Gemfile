@@ -5,6 +5,7 @@ gem 'rails', '4.1.6'
 
 gem 'clearance'
 gem 'coffee-rails', '~> 4.0.0'
+gem 'dotenv-rails'
 gem 'foundation-rails'
 gem 'jquery-rails'
 gem 'git', github: 'schacon/ruby-git'
@@ -15,6 +16,11 @@ gem 'sqlite3'
 gem 'uglifier', '>= 1.3.0'
 
 group :development do
+  gem 'capistrano',         require: false
+  gem 'capistrano-rvm',     require: false
+  gem 'capistrano-rails',   require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano3-puma',   require: false
   gem 'pry-rails'
   gem 'quiet_assets'
   gem 'spring'
