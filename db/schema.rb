@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141028160540) do
+ActiveRecord::Schema.define(version: 20141029225619) do
 
   create_table "dists", force: true do |t|
     t.string   "branch_name"
@@ -21,12 +21,13 @@ ActiveRecord::Schema.define(version: 20141028160540) do
   end
 
   create_table "users", force: true do |t|
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "email",                          null: false
-    t.string   "encrypted_password", limit: 128, null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.string   "email",                                          null: false
+    t.string   "encrypted_password", limit: 128,                 null: false
     t.string   "confirmation_token", limit: 128
-    t.string   "remember_token",     limit: 128, null: false
+    t.string   "remember_token",     limit: 128,                 null: false
+    t.boolean  "admin",                          default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email"
