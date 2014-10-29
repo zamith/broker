@@ -1,3 +1,5 @@
+require 'sidekiq'
+
 module Jobs
   module Adapters
     class Sidekiq
