@@ -22,3 +22,5 @@ module Broker
     config.eager_load_paths -= %W( #{config.root}/app/jobs )
   end
 end
+
+require_relative "#{Rails.root}/app/jobs/generate_dist"
