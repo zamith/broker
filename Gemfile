@@ -15,6 +15,7 @@ gem 'sidekiq'
 gem 'slim-rails'
 gem 'sqlite3'
 gem 'uglifier', '>= 1.3.0'
+gem 'whenever', :require => false
 
 group :development do
   gem 'capistrano',         require: false
@@ -22,6 +23,7 @@ group :development do
   gem 'capistrano-rails',   require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-puma',   require: false
+  gem 'capistrano-sidekiq'
   gem 'pry-rails'
   gem 'quiet_assets'
   gem 'spring'

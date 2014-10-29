@@ -9,4 +9,4 @@ table.dists-table.small-12.columns
       tr
         td = dist.branch_name
         td = dist.created_at
-        td = link_to "Download", dist.url, class: "button tiny"
+        td = link_to "Download", download_dist_path(dist), class: "button tiny"

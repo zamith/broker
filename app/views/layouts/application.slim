@@ -13,6 +13,7 @@ html lang="en"
   body
     #header
       - if signed_in?
+        = button_to "Generate Dist", dists_path,  class: "button tiny success"
         = button_to t('.sign_out'), sign_out_path, :method => :delete, class: "button tiny alert"
       - else
         = link_to t('.sign_in'), sign_in_path

@@ -1,3 +1,7 @@
-class Adapters::Sidekiq
-  include Sidekiq::Worker
+module Jobs
+  module Adapters
+    class Sidekiq
+      include ::Sidekiq::Worker
+    end
+  end
 end
