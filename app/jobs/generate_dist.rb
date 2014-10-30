@@ -8,7 +8,6 @@ module Jobs
         repo.branch('develop').checkout
         repo.fetch
         changes = repo.log.between("HEAD", "origin/develop").map(&:message)
-        binding.pry
         repo.merge('origin/develop')
         do_not_process_images
         create_dist
