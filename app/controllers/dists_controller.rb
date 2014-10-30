@@ -4,7 +4,7 @@ class DistsController < ::ApplicationController
   before_filter :authorize
 
   def index
-    @dists = Dist.all
+    @dists = Dist.all.order(created_at: :desc)
   end
 
   def create

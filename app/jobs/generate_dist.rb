@@ -11,6 +11,7 @@ module Jobs
         create_dist
         repo.reset_hard('HEAD')
         save_dist
+        remove_older_dist
       end
     end
 
@@ -51,8 +52,18 @@ module Jobs
     def save_dist
       sleep 2
       dist_name = "dist-#{DateTime.now.strftime('%Y-%m-%d-%H-%M')}"
-      FileUtils.mv 'dist.zip', "#{Rails.root}/public/dists/#{dist_name}.zip"
+      FileUtils.mv 'dist.zip', dist_path(dist_name)
       Dist.create branch_name: 'develop', url: "#{dist_name}"
+    end
+
+    def remove_older_dist
+      if Dist.count > Dist::DIST_LIMIT
+        Dist.first.destroy
+      end
+    end
+
+    def dist_path(dist_name)
+      Dist.new(url: dist_name).dist_path
     end
   end
 end
