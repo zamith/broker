@@ -7,6 +7,10 @@ class Dist < ActiveRecord::Base
     "#{Rails.root}/public/dists/#{url}.zip"
   end
 
+  def release_manifest
+    read_attribute(:release_manifest) && read_attribute(:release_manifest).split("\n")
+  end
+
   private
   def remove_files
     FileUtils.rm_f dist_path

@@ -12,6 +12,10 @@ class DistsController < ::ApplicationController
     redirect_to dists_path
   end
 
+  def show
+    @dist = Dist.find(params[:id])
+  end
+
   def download
     dist = Dist.find(params[:id])
     file_path = "#{Rails.root}/public/dists/#{dist.url}.zip"

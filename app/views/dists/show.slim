@@ -1,0 +1,5 @@
+h1 = "Changes present in #{@dist.url}"
+
+ul
+  - @dist.release_manifest.each do |change|
+    li = change

@@ -2,6 +2,12 @@
   padding: 10px
   text-align: right
 
+  > *
+    display: inline-block
+
+    &:not(:last-child)
+      margin-right: 20px
+
 .container
   margin: 0 auto
   width: $body-width

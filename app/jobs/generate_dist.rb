@@ -6,11 +6,14 @@ module Jobs
       within_repo_dir do
         repo = Git.open('.')
         repo.branch('develop').checkout
-        repo.pull('origin', 'develop')
+        repo.fetch
+        changes = repo.log.between("HEAD", "origin/develop").map(&:message)
+        binding.pry
+        repo.merge('origin/develop')
         do_not_process_images
         create_dist
         repo.reset_hard('HEAD')
-        save_dist
+        save_dist(changes)
         remove_older_dist
       end
     end
@@ -49,11 +52,11 @@ module Jobs
       system('grunt deploy && zip -9 -r dist.zip dist')
     end
 
-    def save_dist
+    def save_dist(changes)
       sleep 2
       dist_name = "dist-#{DateTime.now.strftime('%Y-%m-%d-%H-%M')}"
       FileUtils.mv 'dist.zip', dist_path(dist_name)
-      Dist.create branch_name: 'develop', url: "#{dist_name}"
+      Dist.create branch_name: 'develop', url: "#{dist_name}", release_manifest: changes.join("\n")
     end
 
     def remove_older_dist

@@ -7,6 +7,9 @@ table.dists-table.small-12.columns
   tbody
     - @dists.each do |dist|
       tr
-        td = dist.branch_name
+        - if dist.release_manifest.present?
+          td = link_to dist.branch_name, dist_path(dist)
+        - else
+          td = dist.branch_name
         td = dist.created_at.in_time_zone("Central Time (US & Canada)")
         td = link_to "Download", download_dist_path(dist), class: "button tiny"

@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141029225619) do
+ActiveRecord::Schema.define(version: 20141030201126) do
 
   create_table "dists", force: true do |t|
     t.string   "branch_name"
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "release_manifest"
   end
 
   create_table "users", force: true do |t|
