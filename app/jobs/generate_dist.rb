@@ -2,7 +2,7 @@ require_relative 'adapters/sidekiq'
 
 module Jobs
   class GenerateDist < Adapters::Sidekiq
-    def perform(force: false)
+    def perform(force = false)
       within_repo_dir do
         repo = Git.open('.')
         repo.branch('develop').checkout

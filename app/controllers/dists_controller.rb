@@ -8,7 +8,7 @@ class DistsController < ::ApplicationController
   end
 
   def create
-    Jobs::GenerateDist.perform_async(force: true)
+    Jobs::GenerateDist.perform_async(true)
     redirect_to dists_path
   end
 
