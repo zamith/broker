@@ -7,7 +7,7 @@ module Jobs
         repo = Git.open('.')
         repo.branch('develop').checkout
         repo.fetch
-        changes = repo.log.between("HEAD", "origin/develop").map(&:message)
+        changes = repo.log.between("HEAD", "origin/develop")
         unless changes.empty?
           repo.merge('origin/develop')
           do_not_process_images
@@ -57,7 +57,13 @@ module Jobs
       sleep 2
       dist_name = "dist-#{DateTime.now.strftime('%Y-%m-%d-%H-%M')}"
       FileUtils.mv 'dist.zip', dist_path(dist_name)
-      Dist.create branch_name: 'develop', url: "#{dist_name}", release_manifest: changes.join("\n")
+      Dist.create branch_name: 'develop', url: "#{dist_name}", release_manifest: parse_commits(changes)
+    end
+
+    def parse_commits(commits)
+      commits.map do |commit|
+        "#{commit.message} (#{commit.author.try(:name)})"
+      end.join("\n")
     end
 
     def remove_older_dist
