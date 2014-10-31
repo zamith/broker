@@ -2,13 +2,13 @@ require_relative 'adapters/sidekiq'
 
 module Jobs
   class GenerateDist < Adapters::Sidekiq
-    def perform
+    def perform(force: false)
       within_repo_dir do
         repo = Git.open('.')
         repo.branch('develop').checkout
         repo.fetch
         changes = repo.log.between("HEAD", "origin/develop")
-        unless changes.size < 1
+        if changes.size > 1 || force
           repo.merge('origin/develop')
           do_not_process_images
           create_dist
