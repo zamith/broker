@@ -8,12 +8,14 @@ module Jobs
         repo.branch('develop').checkout
         repo.fetch
         changes = repo.log.between("HEAD", "origin/develop").map(&:message)
-        repo.merge('origin/develop')
-        do_not_process_images
-        create_dist
-        repo.reset_hard('HEAD')
-        save_dist(changes)
-        remove_older_dist
+        unless changes.empty?
+          repo.merge('origin/develop')
+          do_not_process_images
+          create_dist
+          repo.reset_hard('HEAD')
+          save_dist(changes)
+          remove_older_dist
+        end
       end
     end
 
