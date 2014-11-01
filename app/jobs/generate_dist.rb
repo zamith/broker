@@ -8,7 +8,7 @@ module Jobs
         repo.branch('develop').checkout
         repo.fetch
         changes = repo.log.between("HEAD", "origin/develop")
-        if changes.size > 1 || force
+        if changes.size > 0 || force
           repo.merge('origin/develop')
           do_not_process_images
           create_dist
