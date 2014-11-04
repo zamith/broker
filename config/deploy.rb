@@ -17,6 +17,8 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
+set :sidekiq_concurrency, 1
+
 namespace :deploy do
   after :publishing, :restart
 end
