@@ -19,3 +19,4 @@ deploy
 .librarian
 dump.rdb
 public/dists
+.env

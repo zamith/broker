@@ -2,19 +2,14 @@ require_relative 'adapters/sidekiq'
 
 module Jobs
   class GenerateDist < Adapters::Sidekiq
+    attr_reader :repo
+
     def perform(force = false)
       within_repo_dir do
-        repo = Git.open('.')
-        repo.branch('develop').checkout
-        repo.fetch
-        changes = repo.log.between("HEAD", "origin/develop")
-        if changes.size > 0 || force
+        if changes_from_previous_dist.size > 0 || force
           repo.merge('origin/develop')
           do_not_process_images
           create_dist
-          repo.reset_hard('HEAD')
-          save_dist(changes)
-          remove_older_dist
         end
       end
     end
@@ -22,7 +17,16 @@ module Jobs
     private
     def within_repo_dir
       Dir.chdir ENV['REPO_PATH'] do
+        @repo = Git.open('.')
         yield
+      end
+    end
+
+    def changes_from_previous_dist
+      @_changes ||= begin
+        repo.branch('develop').checkout
+        repo.fetch
+        repo.log.between("HEAD", "origin/develop")
       end
     end
 
@@ -50,26 +54,26 @@ module Jobs
     end
 
     def create_dist
-      system('grunt deploy && zip -9 -r dist.zip dist')
+      successfull = system('grunt deploy && zip -9 -r dist.zip dist')
+      if successfull
+        repo.reset_hard('HEAD')
+        save_dist
+      else
+        Mailer.error_creating_dist.deliver
+      end
     end
 
-    def save_dist(changes)
+    def save_dist
       sleep 2
       dist_name = "dist-#{DateTime.now.strftime('%Y-%m-%d-%H-%M')}"
       FileUtils.mv 'dist.zip', dist_path(dist_name)
-      Dist.create branch_name: 'develop', url: "#{dist_name}", release_manifest: parse_commits(changes)
+      Dist.create branch_name: 'develop', url: "#{dist_name}", release_manifest: parse_commits(changes_from_previous_dist)
     end
 
     def parse_commits(commits)
       commits.map do |commit|
         "#{commit.message} (#{commit.author.try(:name)})"
       end.join("\n")
-    end
-
-    def remove_older_dist
-      if Dist.count > Dist::DIST_LIMIT
-        Dist.first.destroy
-      end
     end
 
     def dist_path(dist_name)

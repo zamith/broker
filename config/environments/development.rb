@@ -35,4 +35,13 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+  ActionMailer::Base.smtp_settings = {
+    :address        => "smtp.gmail.com",
+    :port           => 587,
+    :domain         => "zamith.pt",
+    :user_name      => ENV['EMAIL_USER'],
+    :password       => ENV['EMAIL_PASSWORD'],
+    :authentication => :plain
+  }
 end
