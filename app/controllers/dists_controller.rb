@@ -18,7 +18,6 @@ class DistsController < ::ApplicationController
 
   def download
     dist = Dist.find(params[:id])
-    file_path = "#{Rails.root}/public/dists/#{dist.url}.zip"
-    send_file file_path
+    send_file dist.path
   end
 end

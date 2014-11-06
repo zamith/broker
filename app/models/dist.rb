@@ -4,7 +4,7 @@ class Dist < ActiveRecord::Base
 
   DIST_LIMIT = 10
 
-  def dist_path
+  def path
     "#{Rails.root}/public/dists/#{url}.zip"
   end
 
