@@ -15,7 +15,7 @@ html lang="en"
     #header.container
       - if signed_in?
         - if admin?
-          = button_to "Generate Dist", dists_path,  class: "button tiny success"
+          = link_to "Generate Dist", dists_path,  class: "button tiny success js-ask-for-branch"
         = button_to t('.sign_out'), sign_out_path, :method => :delete, class: "button tiny alert"
       - else
         = link_to t('.sign_in'), sign_in_path

@@ -2,12 +2,11 @@ require_relative 'adapters/sidekiq'
 
 module Jobs
   class GenerateDist < Adapters::Sidekiq
-    attr_reader :repo
-
-    def perform(force = false)
+    def perform(force = false, branch_name = "develop")
+     @branch_name = branch_name
       within_repo_dir do
         if changes_from_previous_dist.size > 0 || force
-          repo.merge('origin/develop')
+          repo.merge("origin/#{branch_name}")
           do_not_process_images
           create_dist
         end
@@ -15,6 +14,8 @@ module Jobs
     end
 
     private
+    attr_reader :repo, :branch_name
+
     def within_repo_dir
       Dir.chdir ENV['REPO_PATH'] do
         @repo = Git.open('.')
@@ -24,9 +25,9 @@ module Jobs
 
     def changes_from_previous_dist
       @_changes ||= begin
-        repo.branch('develop').checkout
+        repo.branch(branch_name).checkout
         repo.fetch
-        repo.log.between("HEAD", "origin/develop")
+        repo.log.between("HEAD", "origin/#{branch_name}")
       end
     end
 
@@ -65,14 +66,18 @@ module Jobs
 
     def save_dist
       sleep 2
-      dist_name = "dist-#{DateTime.now.in_time_zone("Central Time (US & Canada)").strftime('%Y-%m-%d-%H-%M')}"
+      dist_name = "dist-#{branch_name}-#{current_time}"
       FileUtils.mv 'dist.zip', dist_path(dist_name)
       Dist.create branch_name: 'develop', url: "#{dist_name}", release_manifest: parse_commits(changes_from_previous_dist)
     end
 
+    def current_time
+        DateTime.now.in_time_zone("Central Time (US & Canada)").strftime('%Y-%m-%d-%H-%M')
+    end
+
     def parse_commits(commits)
       commits.map do |commit|
-        "#{commit.message} (#{commit.author.try(:name)})"
+        "#{commit.message.split("\n").first} (#{commit.author.try(:name)})"
       end.join("\n")
     end
 

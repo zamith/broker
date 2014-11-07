@@ -8,7 +8,10 @@ class DistsController < ::ApplicationController
   end
 
   def create
-    Jobs::GenerateDist.perform_async(true)
+    if current_user.admin?
+      Jobs::GenerateDist.perform_async(true, params[:branch_name])
+    end
+
     redirect_to dists_path
   end
 
