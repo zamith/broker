@@ -68,11 +68,11 @@ module Jobs
       sleep 2
       dist_name = "dist-#{branch_name}-#{current_time}"
       FileUtils.mv 'dist.zip', dist_path(dist_name)
-      Dist.create branch_name: 'develop', url: "#{dist_name}", release_manifest: parse_commits(changes_from_previous_dist)
+      Dist.create branch_name: branch_name, url: "#{dist_name}", release_manifest: parse_commits(changes_from_previous_dist)
     end
 
     def current_time
-        DateTime.now.in_time_zone("Central Time (US & Canada)").strftime('%Y-%m-%d-%H-%M')
+      DateTime.now.in_time_zone("Central Time (US & Canada)").strftime('%Y-%m-%d-%H-%M')
     end
 
     def parse_commits(commits)
