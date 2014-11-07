@@ -14,7 +14,7 @@ class Dist < ActiveRecord::Base
 
   private
   def remove_files
-    FileUtils.rm_f dist_path
+    FileUtils.rm_f path
   end
 
   def remove_older_dist
